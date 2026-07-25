@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#111827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Quote Maker Pro">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon.jpg">
+  <link rel="stylesheet" href="styles.css">
+  <title>Quote Maker Pro — Evans Property Clearance</title>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <img id="brandLogo" src="logo.jpg" alt="Evans Property Clearance logo">
+      <div><strong>Quote Maker Pro</strong><span>Evans Property Clearance</span></div>
+    </div>
+    <button class="icon-btn" id="lockBtn" title="Owner view">🔒</button>
+  </header>
+
+  <main>
+    <section id="ownerScreen" class="screen">
+      <div class="quick-actions">
+        <button class="primary" id="calculateBtn">CALCULATE</button>
+        <button id="clearBtn">CLEAR QUOTE</button>
+        <button id="saveBtn">SAVE QUOTE</button>
+        <button id="whatsappBtn">SEND BY WHATSAPP</button>
+        <button id="savedBtn">VIEW SAVED QUOTES</button>
+        <button id="customerBtn">CUSTOMER VIEW</button>
+        <button id="weightsBtn">SHOW ESTIMATED WEIGHTS</button>
+      </div>
+
+      <section class="card">
+        <h2>Customer</h2>
+        <div class="grid">
+          <label>Name<input id="customerName" autocomplete="name"></label>
+          <label>Telephone<input id="customerPhone" type="tel" autocomplete="tel"></label>
+          <label class="wide">Address<textarea id="customerAddress" rows="2"></textarea></label>
+          <label class="wide">Job notes<textarea id="jobNotes" rows="2"></textarea></label>
+          <label>Quote number<input id="quoteNumber" readonly></label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Waste</h2>
+        <div id="wasteRows"></div>
+      </section>
+
+      <section class="card">
+        <h2>Common items</h2>
+        <div class="item-grid" id="commonItems"></div>
+      </section>
+
+      <section class="card">
+        <h2>Extra charges</h2>
+        <div class="extra-grid" id="extras"></div>
+        <label>Custom labour charge (£)<input id="customLabour" type="number" min="0" step="1" inputmode="decimal" placeholder="0"></label>
+      </section>
+
+      <section class="card">
+        <h2>Price</h2>
+        <div class="price-options">
+          <button class="selected" data-price="standard">STANDARD ×1.5</button>
+          <button data-price="plus10">+10%</button>
+          <button data-price="plus20">+20%</button>
+          <button data-price="custom">CUSTOM</button>
+        </div>
+        <label id="customPriceWrap" class="hidden">Custom customer price (£)
+          <input id="customPrice" type="number" min="80" step="1" inputmode="decimal" placeholder="80">
+        </label>
+        <div class="quote-preview">
+          <span>Customer quote</span>
+          <strong id="quoteTotal">£80.00</strong>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Payment</h2>
+        <div class="payment-grid">
+          <button data-payment="Cash">Cash</button>
+          <button data-payment="Bank Transfer">Bank Transfer</button>
+          <button data-payment="Paid">Paid</button>
+          <button data-payment="Outstanding">Outstanding</button>
+        </div>
+        <p id="paymentStatus" class="status">Outstanding</p>
+      </section>
+    </section>
+
+    <section id="customerScreen" class="screen hidden">
+      <div class="customer-card">
+        <img src="logo.jpg" id="customerLogo" alt="Evans Property Clearance">
+        <h1>EVANS PROPERTY CLEARANCE</h1>
+        <div class="customer-price" id="customerPriceDisplay">£80.00</div>
+        <p>Waste Removal Quote</p>
+        <button class="secondary" id="backOwnerBtn">OWNER VIEW</button>
+      </div>
+    </section>
+
+    <section id="dashboardScreen" class="screen hidden">
+      <div class="dashboard-head">
+        <button id="dashboardBack">← Quote</button>
+        <h1>Owner Dashboard</h1>
+      </div>
+      <div class="stats">
+        <div><span>Daily profit</span><strong id="dailyProfit">£0.00</strong></div>
+        <div><span>Weekly profit</span><strong id="weeklyProfit">£0.00</strong></div>
+        <div><span>Monthly profit</span><strong id="monthlyProfit">£0.00</strong></div>
+        <div><span>Outstanding</span><strong id="outstandingTotal">£0.00</strong></div>
+      </div>
+      <div class="card">
+        <h2>This week</h2>
+        <div class="week-stats">
+          <p>Total quoted <strong id="weekQuoted">£0.00</strong></p>
+          <p>Total paid <strong id="weekPaid">£0.00</strong></p>
+          <p>Total outstanding <strong id="weekOutstanding">£0.00</strong></p>
+          <p>Total profit <strong id="weekProfit">£0.00</strong></p>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Saved quotes</h2>
+        <div id="savedList"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="costDrawer" class="drawer hidden">
+    <div class="drawer-panel">
+      <button class="close" id="closeCosts">×</button>
+      <h2>My costs</h2>
+      <div id="costBreakdown"></div>
+    </div>
+  </div>
+
+  <div id="weightsModal" class="modal hidden">
+    <div class="modal-panel">
+      <button class="close" id="closeWeights">×</button>
+      <h2>Estimated weight guide</h2>
+      <div id="weightsTable"></div>
+    </div>
+  </div>
+
+  <div id="pinModal" class="modal hidden">
+    <div class="modal-panel pin-panel">
+      <h2>Owner PIN</h2>
+      <p>Enter your PIN to open owner controls.</p>
+      <input id="pinInput" type="password" inputmode="numeric" maxlength="8" autocomplete="off">
+      <button class="primary" id="pinSubmit">UNLOCK</button>
+      <button id="pinCancel">CANCEL</button>
+      <small>Default PIN: 2468. Change it in Settings in the app code before use.</small>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
