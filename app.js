@@ -96,6 +96,17 @@ function jobType(w){
   if((soil||rubble)&&!other)return 130;
   return 60;
 }
+
+function clearQuote(){
+  document.querySelectorAll("[data-qty]").forEach(i=>i.value=0);
+  document.querySelectorAll("#extras [data-extra].active").forEach(b=>b.classList.remove("active"));
+  ["customerName","customerPhone","customerAddress","jobNotes","customLabour","customPrice"].forEach(id=>{const e=$(id); if(e) e.value="";});
+  document.querySelectorAll(".price-options button,.payment-grid button").forEach(b=>b.classList.remove("selected"));
+  if($("paymentStatus")) $("paymentStatus").textContent="";
+  if($("customPriceWrap")) $("customPriceWrap").classList.add("hidden");
+  recalc();
+  toast("Quote cleared");
+}
 function recalc(){
   const d=getData();$("quoteTotal").textContent=money(d.quote);$("customerPriceDisplay").textContent=money(d.quote);
   $("paymentStatus").textContent=document.querySelector(".payment-grid .selected")?.dataset.payment||"Outstanding";
