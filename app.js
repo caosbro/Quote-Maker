@@ -22,7 +22,7 @@ const CONFIG={
   }
 };
 let state=loadState();
-const $=id=>document.getElementById(id);
+const $=sel=> sel.startsWith("#")?document.querySelector(sel): (sel.includes("[")||sel.includes(".")||sel.includes(" "))?document.querySelector(sel):document.getElementById(sel);
 const money=n=>new Intl.NumberFormat("en-GB",{style:"currency",currency:"GBP"}).format(Number(n)||0);
 const todayISO=()=>new Date().toISOString();
 function loadState(){return JSON.parse(localStorage.getItem("epc_quotes")||"[]")}
